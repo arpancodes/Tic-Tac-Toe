@@ -4,22 +4,22 @@ public class Main {
     public static void main(String[] args) {
         // write your code here
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter cells:");
-        String inputString = scanner.nextLine();
-        String[] pattern = inputString.split("(?!^)");
+//        System.out.println("Enter cells:");
+//        String inputString = scanner.nextLine();
+//        String[] pattern = inputString.split("(?!^)");
         String[][] maze = new String[3][3];
 
         int count = 0;
         for (int i = 0; i < 3; i++){
             for (int j = 0; j < 3; j++) {
-                maze[i][j] = pattern[count];
+                maze[i][j] = " ";
                 count++;
             }
         }
 
         String currentPlayer = "X";
         printMaze(maze);
-//        while(!(checkRow(maze) || checkColumn(maze) || checkDiagonal1(maze) || checkDiagonal2(maze) || checkDraw(maze)) || checkImpossible(maze)){
+        while(!(checkRow(maze) || checkColumn(maze) || checkDiagonal1(maze) || checkDiagonal2(maze) || checkDraw(maze)) || checkImpossible(maze)){
             String x, y;
             do{
                 System.out.println("Enter the coordinates:" );
@@ -30,7 +30,7 @@ public class Main {
                 }else if(Integer.parseInt(x) < 1 || Integer.parseInt(x) > 3 || Integer.parseInt(y) < 1 || Integer.parseInt(y) > 3 ){
                     System.out.println("Coordinates should be from 1 to 3!");
                 }
-                else if(!maze[Integer.parseInt(x) - 1][Integer.parseInt(y) - 1].equals("_")){
+                else if(!maze[Integer.parseInt(x) - 1][Integer.parseInt(y) - 1].equals(" ")){
                     System.out.println("This cell is occupied! Choose another one!");
                 } else
                     break;
@@ -40,11 +40,11 @@ public class Main {
             int yCoord =  Integer.parseInt(y);
 
             maze[xCoord - 1][yCoord - 1] = currentPlayer;
-//            currentPlayer = currentPlayer.equals("X") ? "O" : "X";
+            currentPlayer = currentPlayer.equals("X") ? "O" : "X";
             printMaze(maze);
 
 
-//        }
+        }
 
 //        if(!checkImpossible(maze)) {
 //            if (!(checkRow(maze) || checkColumn(maze) || checkDiagonal1(maze) || checkDiagonal2(maze))){
@@ -64,7 +64,7 @@ public class Main {
             String player = maze[i][0];
             boolean playerWon = true;
             for(int j = 1; j < 3; j++){
-                if (!player.equals(maze[i][j]) || player.equals("_")){
+                if (!player.equals(maze[i][j]) || player.equals(" ")){
                     playerWon = false;
                     break;
                 }
@@ -94,7 +94,7 @@ public class Main {
             String player = maze[0][i];
             boolean playerWon = true;
             for(int j = 1; j < 3; j++){
-                if (!player.equals(maze[j][i]) || player.equals("_")){
+                if (!player.equals(maze[j][i]) || player.equals(" ")){
                     playerWon = false;
                     break;
                 }
@@ -119,14 +119,11 @@ public class Main {
     public static boolean checkDiagonal1(String[][] maze){
         boolean anyoneWins = false;
         String won = "";
-        for(int i = 1, j = 1; i < 3 && j < 3 ; i++, j++){
-            String player = maze[0][0];
-            if (!player.equals(maze[j][i]) || player.equals("_"))
-                break;
-
+        String player = maze[0][0];
+        if (player.equals(maze[1][1]) && player.equals(maze[2][2]) && !player.equals(" "))
+        {
             anyoneWins = true;
             won = player;
-            break;
         }
         if (anyoneWins){
             System.out.println(won + " wins");
@@ -139,14 +136,11 @@ public class Main {
     public static boolean checkDiagonal2(String[][] maze){
         boolean anyoneWins = false;
         String won = "";
-        for(int i = 1, j = 1; i > -1 && j < 3 ; i--, j++){
-            String player = maze[0][2];
-            if (!player.equals(maze[j][i]) || player.equals("_"))
-                break;
-
+        String player = maze[2][2];
+        if (player.equals(maze[1][1]) && player.equals(maze[2][0]) && !player.equals(" "))
+        {
             anyoneWins = true;
             won = player;
-            break;
         }
         if (anyoneWins){
             System.out.println(won + " wins");
@@ -174,7 +168,7 @@ public class Main {
     public static boolean checkDraw(String[][] maze){
         for (int i = 0; i < 3; i++){
             for (int j = 0; j < 3; j++){
-                if(maze[i][j].equals("_")) return false;
+                if(maze[i][j].equals(" ")) return false;
             }
         }
         System.out.println("Draw");
