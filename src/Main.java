@@ -16,25 +16,43 @@ public class Main {
                 count++;
             }
         }
-        System.out.print("---------");
-        for (int i = 0; i < 3; i++){
-            System.out.println();
-            System.out.print("| ");
-            for (int j = 0; j < 3; j++) {
-                System.out.print(maze[i][j]+ " ");
-            }
-            System.out.print("|");
-        }
-        System.out.println();
-        System.out.println("---------");
 
-        if(!checkImpossible(maze)) {
-            if (!(checkRow(maze) || checkColumn(maze) || checkDiagonal1(maze) || checkDiagonal2(maze))){
-                if(!checkDraw(maze)){
-                    System.out.println("Game not finished");
+        String currentPlayer = "X";
+        printMaze(maze);
+//        while(!(checkRow(maze) || checkColumn(maze) || checkDiagonal1(maze) || checkDiagonal2(maze) || checkDraw(maze)) || checkImpossible(maze)){
+            String x, y;
+            do{
+                System.out.println("Enter the coordinates:" );
+                x = scanner.next();
+                y = scanner.next();
+                if(!(isNumeric(x) || isNumeric(y))){
+                    System.out.println("You should enter numbers!");
+                }else if(Integer.parseInt(x) < 1 || Integer.parseInt(x) > 3 || Integer.parseInt(y) < 1 || Integer.parseInt(y) > 3 ){
+                    System.out.println("Coordinates should be from 1 to 3!");
                 }
-            }
-        }
+                else if(!maze[Integer.parseInt(x) - 1][Integer.parseInt(y) - 1].equals("_")){
+                    System.out.println("This cell is occupied! Choose another one!");
+                } else
+                    break;
+            } while(true);
+
+            int xCoord =  Integer.parseInt(x);
+            int yCoord =  Integer.parseInt(y);
+
+            maze[xCoord - 1][yCoord - 1] = currentPlayer;
+//            currentPlayer = currentPlayer.equals("X") ? "O" : "X";
+            printMaze(maze);
+
+
+//        }
+
+//        if(!checkImpossible(maze)) {
+//            if (!(checkRow(maze) || checkColumn(maze) || checkDiagonal1(maze) || checkDiagonal2(maze))){
+//                if(!checkDraw(maze)){
+//                    System.out.println("Game not finished");
+//                }
+//            }
+//        }
 
     }
 
@@ -46,7 +64,7 @@ public class Main {
             String player = maze[i][0];
             boolean playerWon = true;
             for(int j = 1; j < 3; j++){
-                if (!player.equals(maze[i][j])){
+                if (!player.equals(maze[i][j]) || player.equals("_")){
                     playerWon = false;
                     break;
                 }
@@ -76,7 +94,7 @@ public class Main {
             String player = maze[0][i];
             boolean playerWon = true;
             for(int j = 1; j < 3; j++){
-                if (!player.equals(maze[j][i])){
+                if (!player.equals(maze[j][i]) || player.equals("_")){
                     playerWon = false;
                     break;
                 }
@@ -103,7 +121,7 @@ public class Main {
         String won = "";
         for(int i = 1, j = 1; i < 3 && j < 3 ; i++, j++){
             String player = maze[0][0];
-            if (!player.equals(maze[j][i]))
+            if (!player.equals(maze[j][i]) || player.equals("_"))
                 break;
 
             anyoneWins = true;
@@ -123,7 +141,7 @@ public class Main {
         String won = "";
         for(int i = 1, j = 1; i > -1 && j < 3 ; i--, j++){
             String player = maze[0][2];
-            if (!player.equals(maze[j][i]))
+            if (!player.equals(maze[j][i]) || player.equals("_"))
                 break;
 
             anyoneWins = true;
@@ -163,4 +181,29 @@ public class Main {
         return true;
     }
 
+    public static void printMaze(String[][] maze){
+        System.out.print("---------");
+        for (int i = 0; i < 3; i++){
+            System.out.println();
+            System.out.print("| ");
+            for (int j = 0; j < 3; j++) {
+                System.out.print(maze[i][j]+ " ");
+            }
+            System.out.print("|");
+        }
+        System.out.println();
+        System.out.println("---------");
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
 }
